@@ -20,6 +20,16 @@ boot2docker-up() {
 
 dockerip() { docker inspect $1 | grep IPAddress | cut -d '"' -f 4; }
 
+dockercp() {
+  cat $1 | docker exec $2 sh -c "cat > $3"
+}
+
+docker-copy() {
+  CID=$(docker inspect --format '{{.Id}}' $1)
+  TARGET=$(cd $(dirname $2); pwd)/$(basename $2)
+  boot2docker ssh -t sudo cp $TARGET /var/lib/docker/aufs/mnt/$CID/$3
+}
+
 alias dockerips='docker ps | tail -n +2 | while read cid b; do echo -n "$cid: "; docker inspect $cid | grep IPAddress | cut -d \" -f 4; done'
 
 ## setup boot2docker environment variables
