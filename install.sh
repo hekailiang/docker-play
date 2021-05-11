@@ -115,5 +115,12 @@ rm -rf .mvn
 end=`date +%s`;
 info "Total used time:" $(( end-start ))"s"
 
+secs=10
+while [ $secs -gt 0 ]; do
+   echo -ne "wait ${tty_red}$secs\033[0Ks${tty_reset} to continue launching application ...\r"
+   sleep 1
+   : $((secs--))
+done
+
 # start application
 cd "${artifactId}" && java -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
