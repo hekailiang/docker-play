@@ -29,11 +29,13 @@ LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
 LIBCRYPTO_TARGET_PATH="/usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib"
 if [[ "$(uname)" = "Darwin" ]]; then
   if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
-    echo "link $LIBSSL_SOURCE_PATH -> $LIBSSL_TARGET_PATH, please grant the permission"
+    echo "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
+    echo "sudo ln -s $LIBSSL_SOURCE_PATH $LIBSSL_TARGET_PATH"
     sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
   fi
   if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
-    echo "link $LIBCRYPTO_SOURCE_PATH -> $LIBCRYPTO_TARGET_PATH, please grant the permission"
+    echo "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
+    echo "sudo ln -s $LIBCRYPTO_SOURCE_PATH $LIBCRYPTO_TARGET_PATH"
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
 fi
