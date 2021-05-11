@@ -63,7 +63,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
         </profile>
     </profiles>
 </settings>' > .mvn/settings.xml && \
-mvn -s .mvn/settings.xml archetype:generate -DarchetypeGroupId=com.alipay.archetypes -DarchetypeArtifactId=glocal-sofaboot-archetype \
+mvn -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGroupId=com.alipay.archetypes -DarchetypeArtifactId=glocal-sofaboot-archetype \
     -DarchetypeVersion=4.2.2 -DarchetypeCatalog=local -DinteractiveMode=false \
     -DgroupId="${groupId}" -DartifactId="${artifactId}" -DappId="${appId}" -DdbSchema="${dbSchema}" -DdockerRepo="${dockerRepo}" && \
 rm -rf .mvn
