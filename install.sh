@@ -39,7 +39,7 @@ fi
 
 # initialize application skeleton
 start=`date +%s`;
-archetypeRepository=http://mvn.dev.alipayplus.alipay.net/nexus/content/groups/Core-Group
+archetypeRepository=http://mvn.dev.alipayplus.alipay.net/nexus/content/groups/Core-Group && \
 if [[ -d .mvn ]]; then rm -rf .mvn; fi && \
 if [[ -d "${artifactId}" ]]; then rm -rf "${artifactId}"; fi && \
 mkdir -p .mvn && \
