@@ -16,8 +16,8 @@ if ! [[ -x "$(command -v mvn)" ]]; then
 fi
 if [[ -z "${JAVA_HOME}" ]]; then
   echo "JAVA_HOME must be set, exit"
-  JAVA_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
-  echo "export JAVA_HOME=${${JAVA_HOME:16}%*/jre}"
+  JRE_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
+  echo "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
   return
 fi
 
