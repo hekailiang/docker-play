@@ -33,16 +33,21 @@ shell_join() {
   done
 }
 
-info "setup ${artifactId} application information ..."
 groupId="${groupId:-com.alipay.ap.demo}"
 artifactId="${artifactId:-${groupId##*.}}"
 dbSchema="${dbSchema:-${artifactId}}"
 appId="${appId:-1200}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
+info "confirm ${artifactId} application information ..."
 info "groupId: ${groupId}"
 info "artifactId: ${artifactId}"
 info "dbSchema: ${dbSchema}"
 info "appId: ${appId}"
+echo -n "continue to initializing application (y/n)? "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    return
+fi
 
 info "checking ${artifactId} application dependencies ..."
 if ! [[ -x "$(command -v java)" ]]; then 
