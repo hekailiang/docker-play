@@ -33,14 +33,18 @@ shell_join() {
   done
 }
 
-# setup application information
+info "setup ${artifactId} application information ..."
 groupId="${groupId:-com.alipay.ap.demo}"
 artifactId="${artifactId:-${groupId##*.}}"
 dbSchema="${dbSchema:-${artifactId}}"
 appId="${appId:-1200}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
+info "groupId: ${groupId}"
+info "artifactId: ${artifactId}"
+info "dbSchema: ${dbSchema}"
+info "appId: ${appId}"
 
-# check environment dependencies
+info "checking ${artifactId} application dependencies ..."
 if ! [[ -x "$(command -v java)" ]]; then 
   warn "java must be instsalled first, exit"
   return
@@ -57,7 +61,6 @@ if [[ -z "${JAVA_HOME}" ]]; then
   return
 fi
 
-# prepare embedded database dependencies, only applied for macos
 LIBSSL_SOURCE_PATH="/usr/lib/libssl.dylib"
 LIBSSL_TARGET_PATH="/usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
 LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
@@ -75,7 +78,7 @@ if [[ "$(uname)" = "Darwin" ]]; then
   fi
 fi
 
-# initialize application skeleton
+info "initializing ${artifactId} application ..."
 start=`date +%s`;
 archetypeRepository=http://mvn.dev.alipayplus.alipay.net/nexus/content/groups/Core-Group && \
 if [[ -d .mvn ]]; then rm -rf .mvn; fi && \
@@ -111,7 +114,6 @@ mvn -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGro
     -DarchetypeVersion=4.2.2 -DarchetypeCatalog=local -DinteractiveMode=false \
     -DgroupId="${groupId}" -DartifactId="${artifactId}" -DappId="${appId}" -DdbSchema="${dbSchema}" -DdockerRepo="${dockerRepo}" && \
 rm -rf .mvn
-
 end=`date +%s`;
 info "initialize application spent " $(( end-start ))"s"
 
@@ -124,7 +126,6 @@ done
 echo ""
 sleep 1
 
-# start application
-info "launching application ..."
+info "launching ${artifactId} application ..."
 info "install mariadb database at ${artifactId}/.database"
 cd "${artifactId}" && java -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
