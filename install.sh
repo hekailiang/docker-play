@@ -45,25 +45,26 @@ info "dbSchema: ${dbSchema}"
 info "appId: ${appId}"
 echo -n "continue to initializing application (y/n)? "
 read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-    exit 1
+if [ "$answer" == "${answer#[Yy]}" ] ;then
+   echo "goodbye!"
+   exit 1
 fi
 
 info "checking ${artifactId} application dependencies ..."
 if ! [[ -x "$(command -v java)" ]]; then 
   warn "java must be instsalled first, exit"
-  return
+  exit 1
 fi
 if ! [[ -x "$(command -v mvn)" ]]; then 
   warn "maven must be instsalled first, exit"
-  return
+  exit 1
 fi
 if [[ -z "${JAVA_HOME}" ]]; then
   warn "JAVA_HOME must be set, exit"
   JRE_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
   info "run following command or add into .bashrc or .zshrc"
   info "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
-  return
+  exit 1
 fi
 
 LIBSSL_SOURCE_PATH="/usr/lib/libssl.dylib"
