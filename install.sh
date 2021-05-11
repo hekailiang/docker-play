@@ -46,7 +46,7 @@ info "appId: ${appId}"
 echo -n "continue to initializing application (y/n)? "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    return
+    exit 1
 fi
 
 info "checking ${artifactId} application dependencies ..."
