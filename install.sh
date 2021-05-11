@@ -1,9 +1,9 @@
 # setup application information
-groupId=com.alipay.ap.demo
-artifactId=demo
-appId=1512
-dbSchema=demo
-dockerRepo=registry.cn-shanghai.aliyuncs.com
+groupId="${groupId:=com.alipay.ap.demo}"
+artifactId="${artifactId:=demo}"
+appId="${appId:=1512}"
+dbSchema="${dbSchema:=demo}"
+dockerRepo="${dockerRepo:=registry.cn-shanghai.aliyuncs.com}"
 
 # check environment dependencies
 if ! [[ -x "$(command -v java)" ]]; then 
