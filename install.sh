@@ -64,12 +64,12 @@ LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
 LIBCRYPTO_TARGET_PATH="/usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib"
 if [[ "$(uname)" = "Darwin" ]]; then
   if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
-    info "setup required library $LIBSSL_TARGET_PATH for MariaDB (which may request your password)"
+    info "setup required library ${LIBSSL_TARGET_PATH##*/} for MariaDB (which may request your password)"
     info "sudo ln -s $LIBSSL_SOURCE_PATH $LIBSSL_TARGET_PATH"
     sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
   fi
   if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
-    info "setup required library $LIBCRYPTO_TARGET_PATH for MariaDB (which may request your password)"
+    info "setup required library ${LIBCRYPTO_TARGET_PATH##*/} for MariaDB (which may request your password)"
     info "sudo ln -s $LIBCRYPTO_SOURCE_PATH $LIBCRYPTO_TARGET_PATH"
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
