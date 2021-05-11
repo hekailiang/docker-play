@@ -8,11 +8,15 @@ dockerRepo="${dockerRepo:=registry.cn-shanghai.aliyuncs.com}"
 # check environment dependencies
 if ! [[ -x "$(command -v java)" ]]; then 
   echo "java must be instsalled first, exit"
-	return
+  return
 fi
 if ! [[ -x "$(command -v mvn)" ]]; then 
   echo "maven must be instsalled first, exit"
-	return
+  return
+fi
+if [[ -z "${JAVA_HOME}" ]]; then
+  echo "JAVA_HOME must be set, exit"
+  return
 fi
 
 # prepare embedded database dependencies, only applied for macos
@@ -21,14 +25,14 @@ LIBSSL_TARGET_PATH="/usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
 LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
 LIBCRYPTO_TARGET_PATH="/usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib"
 if [[ "$(uname)" = "Darwin" ]]; then
-	if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
-		echo "link $LIBSSL_SOURCE_PATH -> $LIBSSL_TARGET_PATH"
-		sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
-	fi
-	if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
-	  echo "link $LIBCRYPTO_SOURCE_PATH -> $LIBCRYPTO_TARGET_PATH"
-		sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
-	fi
+  if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
+    echo "link $LIBSSL_SOURCE_PATH -> $LIBSSL_TARGET_PATH"
+    sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
+  fi
+  if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
+    echo "link $LIBCRYPTO_SOURCE_PATH -> $LIBCRYPTO_TARGET_PATH"
+    sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
+  fi
 fi
 
 # initialize application skeleton
