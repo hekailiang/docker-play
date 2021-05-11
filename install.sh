@@ -17,6 +17,7 @@ fi
 if [[ -z "${JAVA_HOME}" ]]; then
   echo "JAVA_HOME must be set, exit"
   JRE_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
+  echo "please run following command or add into .bashrc or .zshrc"
   echo "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
   return
 fi
@@ -28,11 +29,11 @@ LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
 LIBCRYPTO_TARGET_PATH="/usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib"
 if [[ "$(uname)" = "Darwin" ]]; then
   if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
-    echo "link $LIBSSL_SOURCE_PATH -> $LIBSSL_TARGET_PATH"
+    echo "link $LIBSSL_SOURCE_PATH -> $LIBSSL_TARGET_PATH, please grant the permission"
     sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
   fi
   if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
-    echo "link $LIBCRYPTO_SOURCE_PATH -> $LIBCRYPTO_TARGET_PATH"
+    echo "link $LIBCRYPTO_SOURCE_PATH -> $LIBCRYPTO_TARGET_PATH, please grant the permission"
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
 fi
