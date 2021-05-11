@@ -7,18 +7,18 @@ dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
 
 # check environment dependencies
 if ! [[ -x "$(command -v java)" ]]; then 
-  echo "java must be instsalled first, exit"
+  warn "java must be instsalled first, exit"
   return
 fi
 if ! [[ -x "$(command -v mvn)" ]]; then 
-  echo "maven must be instsalled first, exit"
+  warn "maven must be instsalled first, exit"
   return
 fi
 if [[ -z "${JAVA_HOME}" ]]; then
-  echo "JAVA_HOME must be set, exit"
+  warn "JAVA_HOME must be set, exit"
   JRE_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
-  echo "please run following command or add into .bashrc or .zshrc"
-  echo "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
+  info "please run following command or add into .bashrc or .zshrc"
+  info "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
   return
 fi
 
@@ -29,13 +29,13 @@ LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
 LIBCRYPTO_TARGET_PATH="/usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib"
 if [[ "$(uname)" = "Darwin" ]]; then
   if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
-    echo "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
-    echo "sudo ln -s $LIBSSL_SOURCE_PATH $LIBSSL_TARGET_PATH"
+    info "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
+    info "sudo ln -s $LIBSSL_SOURCE_PATH $LIBSSL_TARGET_PATH"
     sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
   fi
   if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
-    echo "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
-    echo "sudo ln -s $LIBCRYPTO_SOURCE_PATH $LIBCRYPTO_TARGET_PATH"
+    info "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
+    info "sudo ln -s $LIBCRYPTO_SOURCE_PATH $LIBCRYPTO_TARGET_PATH"
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
 fi
@@ -78,7 +78,43 @@ mvn -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGro
 rm -rf .mvn
 
 end=`date +%s`;
-echo "Total used time:" $(( end-start ))"s"
+info "Total used time:" $(( end-start ))"s"
 
 # start application
 cd "${artifactId}" && java -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
+
+# string formatters
+if [[ -t 1 ]]; then
+  tty_escape() { printf "\033[%sm" "$1"; }
+else
+  tty_escape() { :; }
+fi
+tty_mkbold() { tty_escape "1;$1"; }
+tty_underline="$(tty_escape "4;39")"
+tty_blue="$(tty_mkbold 34)"
+tty_red="$(tty_mkbold 31)"
+tty_bold="$(tty_mkbold 39)"
+tty_reset="$(tty_escape 0)"
+
+chomp() {
+  printf "%s" "${1/"$'\n'"/}"
+}
+
+info() {
+  printf "${tty_blue}==>${tty_bold} %s${tty_reset}\n" "$(shell_join "$@")"
+}
+
+warn() {
+  printf "${tty_red}Warning${tty_reset}: %s\n" "$(chomp "$1")"
+}
+
+shell_join() {
+  local arg
+  printf "%s" "$1"
+  shift
+  for arg in "$@"; do
+    printf " "
+    printf "%s" "${arg// /\ }"
+  done
+}
+
