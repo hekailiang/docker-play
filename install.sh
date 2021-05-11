@@ -1,8 +1,8 @@
 # setup application information
 groupId="${groupId:-com.alipay.ap.demo}"
-artifactId="${artifactId:-demo}"
-appId="${appId:-1512}"
-dbSchema="${dbSchema:-demo}"
+artifactId="${artifactId:-${groupId##*.}}"
+dbSchema="${dbSchema:-${artifactId}}"
+appId="${appId:-1200}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
 
 # check environment dependencies
