@@ -121,6 +121,7 @@ while [ $secs -gt 0 ]; do
    sleep 1
    : $((secs--))
 done
+echo ""
 
 # start application
 info "launching application ..."
