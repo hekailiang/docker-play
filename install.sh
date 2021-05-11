@@ -52,7 +52,7 @@ fi
 if [[ -z "${JAVA_HOME}" ]]; then
   warn "JAVA_HOME must be set, exit"
   JRE_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
-  info "please run following command or add into .bashrc or .zshrc"
+  info "run following command or add into .bashrc or .zshrc"
   info "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
   return
 fi
@@ -64,12 +64,12 @@ LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
 LIBCRYPTO_TARGET_PATH="/usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib"
 if [[ "$(uname)" = "Darwin" ]]; then
   if ! [[ -L "$LIBSSL_TARGET_PATH" ]]; then
-    info "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
+    info "setup required library $LIBSSL_TARGET_PATH for MariaDB (which may request your password)"
     info "sudo ln -s $LIBSSL_SOURCE_PATH $LIBSSL_TARGET_PATH"
     sudo ln -s "$LIBSSL_SOURCE_PATH" "$LIBSSL_TARGET_PATH"
   fi
   if ! [[ -L "$LIBCRYPTO_TARGET_PATH" ]]; then
-    info "execute following command to setup mariadb4j required library for MacOS, please grant the permission"
+    info "setup required library $LIBCRYPTO_TARGET_PATH for MariaDB (which may request your password)"
     info "sudo ln -s $LIBCRYPTO_SOURCE_PATH $LIBCRYPTO_TARGET_PATH"
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
