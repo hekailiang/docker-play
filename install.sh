@@ -45,7 +45,7 @@ info "dbSchema: ${dbSchema}"
 info "appId: ${appId}"
 echo -n "continue to initializing application (${tty_bold}y${tty_reset}/n)? "
 read answer
-if ! [[ $answer =~ ^(y|Y|)$ ]] ;then
+if [[ "$answer" == "${answer#[Yy]}" ]] ;then
    echo "goodbye!"
    exit 1
 fi
