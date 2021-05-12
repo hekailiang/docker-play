@@ -155,7 +155,8 @@ mvn -q -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -Darchetype
 rm -rf .mvn
 end=`date +%s`;
 info "initialize ${artifactId} application done, spent ${tty_red}"$(( end-start ))"s${tty_reset}"
-info "🌹🌹🌹 Have a wonderful day 🌹🌹🌹\n"
+info "🌹🌹🌹 Have a wonderful day 🌹🌹🌹"
+echo ""
 
 IDEA=`ls -1d /Applications/IntelliJ\ * | tail -n1`
 if [[ -n "$IDEA" ]]; then
