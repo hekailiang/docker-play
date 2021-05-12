@@ -50,6 +50,7 @@ version="${version:-1.0.0}"
 dbSchema="${dbSchema:-${artifactId}}"
 appId="${appId:-1200}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
+dockerNs="${dockerNs:-glocal}"
 startApp="${startApp:-yes}"
 
 echo "please confirm ${artifactId} application information:"
@@ -58,6 +59,8 @@ info "artifactId: ${artifactId}"
 info "version: ${version}"
 info "dbSchema: ${dbSchema}"
 info "appId: ${appId}"
+info "dockerRepo: ${dockerRepo}"
+info "dockerNs: ${dockerNs}"
 echo -n "continue to initializing application (${tty_bold}y${tty_reset}/n)? "
 read answer
 if [ "${answer:=y}" == "${answer#[Yy]}" ] ;then
@@ -135,9 +138,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
         </profile>
     </profiles>
 </settings>' > .mvn/settings.xml && \
-mvn -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGroupId=com.alipay.archetypes -DarchetypeArtifactId=glocal-sofaboot-archetype \
-    -DarchetypeVersion=4.2.2 -DarchetypeCatalog=local -DinteractiveMode=false \
-    -DgroupId="${groupId}" -DartifactId="${artifactId}" -Dversion="${version}" -DappId="${appId}" -DdbSchema="${dbSchema}" -DdockerRepo="${dockerRepo}" && \
+mvn -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGroupId=com.alipay.archetypes \
+    -DarchetypeArtifactId=glocal-sofaboot-archetype -DarchetypeVersion=4.2.2 -DarchetypeCatalog=local -DinteractiveMode=false \
+    -DgroupId="${groupId}" -DartifactId="${artifactId}" -Dversion="${version}" -DappId="${appId}" -DdbSchema="${dbSchema}" \
+    -DdockerRepo="${dockerRepo}" -DdockerNs="${dockerNs}" && \
 rm -rf .mvn
 end=`date +%s`;
 info "initialize application spent " $(( end-start ))"s"
