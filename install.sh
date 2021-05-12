@@ -71,19 +71,19 @@ fi
 
 info "checking ${artifactId} application dependencies ..."
 if [[ "$appId" =~ [0-9]{4} ]]; then
-  echo "appId..............checked"
+  echo "appId..............checked✅"
 else
   warn "appId must be 4 digits number, exit"
   exit 1
 fi
 if [[ -x "$(command -v java)" ]]; then
-  echo "jdk................checked"
+  echo "jdk................checked✅"
 else
   warn "java must be instsalled first, exit"
   exit 1
 fi
 if [[ -x "$(command -v mvn)" ]]; then
-  echo "maven..............checked"
+  echo "maven..............checked✅"
 else
   warn "maven must be instsalled first, exit"
   exit 1
@@ -95,7 +95,7 @@ if [[ -z "${JAVA_HOME}" ]]; then
   info "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
   exit 1
 else
-  echo "JAVA_HOME..........checked"
+  echo "JAVA_HOME..........checked✅"
 fi
 
 LIBSSL_SOURCE_PATH="/usr/lib/libssl.dylib"
@@ -114,7 +114,7 @@ if [[ "$(uname)" = "Darwin" ]]; then
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
 fi
-echo "libssl/libcrypto...checked"
+echo "libssl/libcrypto...checked✅"
 
 info "initializing ${artifactId} application (which may take a while) ..."
 start=`date +%s`;
@@ -155,10 +155,11 @@ mvn -q -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -Darchetype
 rm -rf .mvn
 end=`date +%s`;
 info "initialize ${artifactId} application done, spent ${tty_red}"$(( end-start ))"s${tty_reset}"
+info "🌹🌹🌹 Have a wonderful day 🌹🌹🌹"
 
 IDEA=`ls -1d /Applications/IntelliJ\ * | tail -n1`
 if [[ -n "$IDEA" ]]; then
-  info "open \"Project Preferences(CMD+,)\", locate \"Build, Execution, Deployment > Build Tools > Maven\" tab"
+  info "open \"Project Preferences(CMD+,)\", find \"Build, Execution, Deployment > Build Tools > Maven\" tab"
   info "set \"User settings file\" to \"$PWD/${artifactId}/.mvn/settings.xml\""
   info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
   wait 10 "to open IDEA with ${artifactId} application ..."
