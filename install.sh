@@ -141,7 +141,7 @@ if [[ -n "$IDEA" ]]; then
   info "set \"User settings file\" to \"$PWD/${artifactId}/.mvn/settings.xml\""
   info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
   wait 10 "to open IDEA on ${artifactId} application ..."
-  open -na "$IDEA" "${artifactId}/pom.xml"
+  open -a "$IDEA" "${artifactId}/pom.xml"
 fi
 
 wait 10 "to continue launching ${artifactId} application ..."
