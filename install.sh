@@ -166,6 +166,7 @@ if [[ -n "$IDEA" ]]; then
   wait 10 "to open IDEA with ${artifactId} application ..."
   open -a "$IDEA" "${artifactId}/pom.xml"
 fi
+echo ""
 
 if [[ "$startApp" =~ ^(y|Y).* ]]; then
   wait 10 "to continue launching ${artifactId} application ..."
