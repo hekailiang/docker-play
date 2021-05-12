@@ -136,6 +136,6 @@ sleep 1
 
 info "launching ${artifactId} application ..."
 info "install mariadb database at ${artifactId}/.database"
-JAVA_OPTS="-server -Xms1800m -Xmx1800m -Xmn680m -XX:MetaspaceSize=340m -XX:MaxMetaspaceSize=340m -XX:HeapDumpPath=$PWD/logs "
-JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 $JAVA_OPTS"
+JAVA_OPTS="-Xms1800m -Xmx1800m -Xmn680m -XX:MetaspaceSize=340m -XX:MaxMetaspaceSize=340m -XX:HeapDumpPath=$PWD/logs"
+JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
 cd "${artifactId}" && java "$JAVA_OPTS"  -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
