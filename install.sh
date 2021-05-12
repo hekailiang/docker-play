@@ -1,3 +1,4 @@
+#!/bin/bash
 # string formatters
 if [[ -t 1 ]]; then
   tty_escape() { printf "\033[%sm" "$1"; }
@@ -63,7 +64,7 @@ info "dockerRepo: ${dockerRepo}"
 info "dockerNs: ${dockerNs}"
 echo -n "continue to initializing application (${tty_bold}y${tty_reset}/n)? "
 read answer
-if [ "${answer:=y}" == "${answer#[Yy]}" ] ;then
+if [[ "${answer:=y}" == "${answer#[Yy]}" ]] ;then
    echo "goodbye!"
    exit 1
 fi
@@ -75,13 +76,13 @@ else
   warn "appId must be 4 digits number, exit"
   exit 1
 fi
-if [[ -x "$(command -v java)" ]]; then 
+if [[ -x "$(command -v java)" ]]; then
   echo "jdk checked"
 else
   warn "java must be instsalled first, exit"
   exit 1
 fi
-if [[ -x "$(command -v mvn)" ]]; then 
+if [[ -x "$(command -v mvn)" ]]; then
   echo "maven checked"
 else
   warn "maven must be instsalled first, exit"
