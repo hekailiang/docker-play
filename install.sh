@@ -141,7 +141,7 @@ if [[ -n "$IDEA" ]]; then
   info "set ${tty_buld}User settings file${tty_reset} to ${tty_buld}$PWD/${artifactId}/.mvn/settings.xml${tty_reset}"
   info "set ${tty_buld}Local repository${tty_reset} to ${tty_buld}$PWD/${artifactId}/.mvn/repository${tty_reset}"
   wait 10 "to open IDEA on ${artifactId} application ..."
-  open -a "$IDEA" "${artifactId}/pom.xml"
+  open -na "$IDEA" "${artifactId}/pom.xml"
 fi
 
 wait 10 "to continue launching ${artifactId} application ..."
