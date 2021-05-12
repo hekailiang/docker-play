@@ -35,17 +35,19 @@ shell_join() {
 
 groupId="${groupId:-com.alipay.ap.demo}"
 artifactId="${artifactId:-${groupId##*.}}"
+version="${version:-1.0.0}"
 dbSchema="${dbSchema:-${artifactId}}"
 appId="${appId:-1200}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
 echo "please confirm ${artifactId} application information:"
 info "groupId: ${groupId}"
 info "artifactId: ${artifactId}"
+info "version: ${version}"
 info "dbSchema: ${dbSchema}"
 info "appId: ${appId}"
-echo -n "continue to initializing application (y/n)? "
+echo -n "continue to initializing application (${tty_bold}y${tty_reset}/n)? "
 read answer
-if [ "$answer" == "${answer#[Yy]}" ] ;then
+if [ "${answer:=y}" == "${answer#[Yy]}" ] ;then
    echo "goodbye!"
    exit 1
 fi
@@ -118,7 +120,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 </settings>' > .mvn/settings.xml && \
 mvn -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGroupId=com.alipay.archetypes -DarchetypeArtifactId=glocal-sofaboot-archetype \
     -DarchetypeVersion=4.2.2 -DarchetypeCatalog=local -DinteractiveMode=false \
-    -DgroupId="${groupId}" -DartifactId="${artifactId}" -DappId="${appId}" -DdbSchema="${dbSchema}" -DdockerRepo="${dockerRepo}" && \
+    -DgroupId="${groupId}" -DartifactId="${artifactId}" -Dversion="${version}" -DappId="${appId}" -DdbSchema="${dbSchema}" -DdockerRepo="${dockerRepo}" && \
 rm -rf .mvn
 end=`date +%s`;
 info "initialize application spent " $(( end-start ))"s"
