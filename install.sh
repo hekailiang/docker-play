@@ -137,9 +137,9 @@ info "initialize application spent " $(( end-start ))"s"
 
 IDEA=`ls -1d /Applications/IntelliJ\ * | tail -n1`
 if [[ -n "$IDEA" ]]; then
-  info "open ${tty_buld}Project Preferences(CMD+,)${tty_reset}, locate ${tty_buld}Build, Execution, Deployment > Build Tools > Maven${tty_reset} tab"
-  info "set ${tty_buld}User settings file${tty_reset} to ${tty_buld}$PWD/${artifactId}/.mvn/settings.xml${tty_reset}"
-  info "set ${tty_buld}Local repository${tty_reset} to ${tty_buld}$PWD/${artifactId}/.mvn/repository${tty_reset}"
+  info "open \"Project Preferences(CMD+,)\", locate \"Build, Execution, Deployment > Build Tools > Maven\" tab"
+  info "set \"User settings file\" to \"$PWD/${artifactId}/.mvn/settings.xml\""
+  info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
   wait 10 "to open IDEA on ${artifactId} application ..."
   open -na "$IDEA" "${artifactId}/pom.xml"
 fi
@@ -147,6 +147,6 @@ fi
 wait 10 "to continue launching ${artifactId} application ..."
 info "launching ${artifactId} application ..."
 info "install mariadb database at ${artifactId}/.database"
-JAVA_OPTS="-Xms1800m -Xmx1800m -Xmn680m -XX:MetaspaceSize=340m -XX:MaxMetaspaceSize=340m -XX:HeapDumpPath=$PWD/${artifactId}/logs"
+JAVA_OPTS="-Xms1000m -Xmx1800m -Xmn680m -XX:MetaspaceSize=340m -XX:MaxMetaspaceSize=340m -XX:HeapDumpPath=$PWD/${artifactId}/logs"
 JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
 cd "${artifactId}" && java "$JAVA_OPTS" -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
