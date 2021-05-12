@@ -119,8 +119,8 @@ echo "libssl/libcrypto...checked✅"
 info "initializing ${artifactId} application (which may take a while) ..."
 start=`date +%s`;
 archetypeRepository=http://mvn.dev.alipayplus.alipay.net/nexus/content/groups/Core-Group && \
-if [[ -d .mvn ]]; then rm -rf .mvn; fi && \
-if [[ -d "${artifactId}" ]]; then rm -rf "${artifactId}"; fi && \
+if [[ -d .mvn ]]; then warn "remove cached .mvn result"; rm -rf .mvn; fi && \
+if [[ -d "${artifactId}" ]]; then warn "remove duplicated project ${artifactId}"; rm -rf "${artifactId}"; fi && \
 mkdir -p .mvn && \
 echo '<?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -158,13 +158,15 @@ info "initialize ${artifactId} application done, spent ${tty_red}"$(( end-start 
 info "🌹🌹🌹 Have a wonderful day 🌹🌹🌹"
 echo ""
 
-IDEA=`ls -1d /Applications/IntelliJ\ * | tail -n1`
-if [[ -n "$IDEA" ]]; then
+unset IDEA SUBLIME
+if [[ -n "${IDEA:=`ls -1d /Applications/IntelliJ\ * | tail -n1`}" ]]; then
   info "open \"Project Preferences(CMD+,)\", find \"Build, Execution, Deployment > Build Tools > Maven\" tab"
   info "set \"User settings file\" to \"$PWD/${artifactId}/.mvn/settings.xml\""
   info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
   wait 10 "to open IDEA with ${artifactId} application ..."
   open -a "$IDEA" "${artifactId}/pom.xml"
+elif [[ -n "${SUBLIME:=`ls -1d /Applications/Sublime\ Text* | tail -n1`}" ]]; then
+  open -a "$SUBLIME" "${artifactId}"
 fi
 echo ""
 
