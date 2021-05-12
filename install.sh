@@ -43,12 +43,15 @@ wait() {
   echo ""
 }
 
+# application settings
 groupId="${groupId:-com.alipay.ap.demo}"
 artifactId="${artifactId:-${groupId##*.}}"
 version="${version:-1.0.0}"
 dbSchema="${dbSchema:-${artifactId}}"
 appId="${appId:-1200}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
+startApp="${startApp:-yes}"
+
 echo "please confirm ${artifactId} application information:"
 info "groupId: ${groupId}"
 info "artifactId: ${artifactId}"
@@ -63,6 +66,10 @@ if [ "${answer:=y}" == "${answer#[Yy]}" ] ;then
 fi
 
 info "checking ${artifactId} application dependencies ..."
+if ! [[ "$appId" =~ [0-9]{4} ]]; then
+  warn "appId must be 4 digits number, exit"
+  exit 1
+fi
 if ! [[ -x "$(command -v java)" ]]; then 
   warn "java must be instsalled first, exit"
   exit 1
@@ -144,8 +151,10 @@ if [[ -n "$IDEA" ]]; then
   open -a "$IDEA" "${artifactId}/pom.xml"
 fi
 
-wait 10 "to continue launching ${artifactId} application ..."
-info "launching ${artifactId} application ..."
-info "install mariadb database at ${artifactId}/.database"
-JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
-cd "${artifactId}" && java "$JAVA_OPTS" -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
+if [[ "$startApp" =~ ^(y|Y).* ]]; then
+  wait 10 "to continue launching ${artifactId} application ..."
+  info "launching ${artifactId} application ..."
+  info "install mariadb database at ${artifactId}/.database"
+  JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
+  cd "${artifactId}" && java "$JAVA_OPTS" -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
+fi
