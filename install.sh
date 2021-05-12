@@ -140,7 +140,7 @@ if [[ -n "$IDEA" ]]; then
   info "open \"Project Preferences(CMD+,)\", locate \"Build, Execution, Deployment > Build Tools > Maven\" tab"
   info "set \"User settings file\" to \"$PWD/${artifactId}/.mvn/settings.xml\""
   info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
-  wait 10 "to open IDEA on ${artifactId} application ..."
+  wait 10 "to open IDEA with ${artifactId} application ..."
   open -a "$IDEA" "${artifactId}/pom.xml"
 fi
 
