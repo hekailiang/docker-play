@@ -33,6 +33,16 @@ shell_join() {
   done
 }
 
+wait() {
+  secs=$1
+  while [ $secs -gt 0 ]; do
+    echo -ne "wait ${tty_red}$secs\033[0Ks${tty_reset} $2\r"
+    sleep 1
+    : $((secs--))
+  done
+  echo ""
+}
+
 groupId="${groupId:-com.alipay.ap.demo}"
 artifactId="${artifactId:-${groupId##*.}}"
 version="${version:-1.0.0}"
@@ -125,17 +135,18 @@ rm -rf .mvn
 end=`date +%s`;
 info "initialize application spent " $(( end-start ))"s"
 
-secs=10
-while [ $secs -gt 0 ]; do
-   echo -ne "wait ${tty_red}$secs\033[0Ks${tty_reset} to continue launching application ...\r"
-   sleep 1
-   : $((secs--))
-done
-echo ""
-sleep 1
+IDEA=`ls -1d /Applications/IntelliJ\ * | tail -n1`
+if [[ -n "$IDEA" ]]; then
+  info "open ${tty_buld}Project Preferences(CMD+,)${tty_reset}, locate ${tty_buld}Build, Execution, Deployment > Build Tools > Maven${tty_reset} tab"
+  info "set ${tty_buld}User settings file${tty_reset} to ${tty_buld}$PWD/${artifactId}/.mvn/settings.xml${tty_reset}"
+  info "set ${tty_buld}Local repository${tty_reset} to ${tty_buld}$PWD/${artifactId}/.mvn/repository${tty_reset}"
+  wait 10 "to open IDEA on ${artifactId} application ..."
+  open -a "$IDEA" "${artifactId}/pom.xml"
+fi
 
+wait 10 "to continue launching ${artifactId} application ..."
 info "launching ${artifactId} application ..."
 info "install mariadb database at ${artifactId}/.database"
-JAVA_OPTS="-Xms1800m -Xmx1800m -Xmn680m -XX:MetaspaceSize=340m -XX:MaxMetaspaceSize=340m -XX:HeapDumpPath=$PWD/logs"
+JAVA_OPTS="-Xms1800m -Xmx1800m -Xmn680m -XX:MetaspaceSize=340m -XX:MaxMetaspaceSize=340m -XX:HeapDumpPath=$PWD/${artifactId}/logs"
 JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
 cd "${artifactId}" && java "$JAVA_OPTS" -jar app/"${artifactId}"-simulator/target/"${artifactId}"-simulator-1.0.0-executable.jar
