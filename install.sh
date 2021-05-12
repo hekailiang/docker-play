@@ -69,15 +69,21 @@ if [ "${answer:=y}" == "${answer#[Yy]}" ] ;then
 fi
 
 info "checking ${artifactId} application dependencies ..."
-if ! [[ "$appId" =~ [0-9]{4} ]]; then
+if [[ "$appId" =~ [0-9]{4} ]]; then
+  echo "appId checked"
+else
   warn "appId must be 4 digits number, exit"
   exit 1
 fi
-if ! [[ -x "$(command -v java)" ]]; then 
+if [[ -x "$(command -v java)" ]]; then 
+  echo "jdk checked"
+else
   warn "java must be instsalled first, exit"
   exit 1
 fi
-if ! [[ -x "$(command -v mvn)" ]]; then 
+if [[ -x "$(command -v mvn)" ]]; then 
+  echo "maven checked"
+else
   warn "maven must be instsalled first, exit"
   exit 1
 fi
@@ -87,6 +93,8 @@ if [[ -z "${JAVA_HOME}" ]]; then
   info "run following command or add into .bashrc or .zshrc"
   info "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
   exit 1
+else
+  echo "JAVA_HOME checked"
 fi
 
 LIBSSL_SOURCE_PATH="/usr/lib/libssl.dylib"
@@ -105,8 +113,9 @@ if [[ "$(uname)" = "Darwin" ]]; then
     sudo ln -s "$LIBCRYPTO_SOURCE_PATH" "$LIBCRYPTO_TARGET_PATH"
   fi
 fi
+echo "libssl/libcrypto checked"
 
-info "initializing ${artifactId} application ..."
+info "initializing ${artifactId} application (which may take a while) ..."
 start=`date +%s`;
 archetypeRepository=http://mvn.dev.alipayplus.alipay.net/nexus/content/groups/Core-Group && \
 if [[ -d .mvn ]]; then rm -rf .mvn; fi && \
@@ -144,7 +153,7 @@ mvn -q -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -Darchetype
     -DdockerRepo="${dockerRepo}" -DdockerNs="${dockerNs}" && \
 rm -rf .mvn
 end=`date +%s`;
-info "initialize application spent " $(( end-start ))"s"
+info "initialize application done, spent "$(( end-start ))"s"
 
 IDEA=`ls -1d /Applications/IntelliJ\ * | tail -n1`
 if [[ -n "$IDEA" ]]; then
