@@ -1,4 +1,7 @@
 #!/bin/bash
+#-u treat unset parameters as an error, rather than substituting them with a blank
+#-e if a simple command fails, errors or returns an exit status value >0
+set -ue
 # string formatters
 if [[ -t 1 ]]; then
   tty_escape() { printf "\033[%sm" "$1"; }
@@ -11,6 +14,11 @@ tty_blue="$(tty_mkbold 34)"
 tty_red="$(tty_mkbold 31)"
 tty_bold="$(tty_mkbold 39)"
 tty_reset="$(tty_escape 0)"
+
+abort() {
+  printf "%s\n" "$@"
+  exit 1
+}
 
 chomp() {
   printf "%s" "${1/"$'\n'"/}"
@@ -65,37 +73,48 @@ info "dockerNs: ${dockerNs}"
 echo -n "continue to initializing application (${tty_bold}y${tty_reset}/n)? "
 read answer
 if [[ "${answer:=y}" == "${answer#[Yy]}" ]] ;then
-   echo "goodbye!"
-   exit 1
+   abort "goodbye!"
 fi
 
 info "checking ${artifactId} application dependencies ..."
+echo -n "appId..............checked"
 if [[ "$appId" =~ [0-9]{4} ]]; then
-  echo "appId..............checked✅"
+  echo "✅"
 else
-  warn "appId must be 4 digits number, exit"
-  exit 1
+  echo "❌"
+  warn "appId must be 4 digits number"
+  abort "exit"
 fi
+
+echo -n "jdk................checked"
 if [[ -x "$(command -v java)" ]]; then
-  echo "jdk................checked✅"
+  echo "✅"
 else
-  warn "java must be instsalled first, exit"
-  exit 1
+  echo "❌"
+  warn "java must be installed first, highly recommend sdkman (https://sdkman.io/) for sdk management"
+  abort "exit"
 fi
+
+echo -n "maven..............checked"
 if [[ -x "$(command -v mvn)" ]]; then
-  echo "maven..............checked✅"
+  echo "✅"
 else
-  warn "maven must be instsalled first, exit"
-  exit 1
+  echo "❌"
+  warn "maven must be installed firs, highly recommend sdkman (https://sdkman.io/) for sdk management"
+  abort "exit"
 fi
-if [[ -z "${JAVA_HOME}" ]]; then
-  warn "JAVA_HOME must be set, exit"
-  JRE_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
+
+echo -n "JAVA_HOME..........checked"
+if [[ -z "${JAVA_HOME-}" ]]; then
+  echo "❌"
+  warn "JAVA_HOME must be set"
+  TEST_JAVA_HOME=`java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'`
+  TEST_JAVA_HOME=${TEST_JAVA_HOME:16}
   info "run following command or add into .bashrc or .zshrc"
-  info "export JAVA_HOME=${${JRE_HOME:16}%*/jre}"
-  exit 1
+  info "export JAVA_HOME=${TEST_JAVA_HOME%*/jre}"
+  abort "exit"
 else
-  echo "JAVA_HOME..........checked✅"
+  echo "✅"
 fi
 
 LIBSSL_SOURCE_PATH="/usr/lib/libssl.dylib"
