@@ -177,7 +177,7 @@ info "initialize ${artifactId} application done, spent ${tty_red}"$(( end-start 
 info "🌹🌹🌹 Have a wonderful day 🌹🌹🌹"
 echo ""
 
-unset VSCODE IDEA SUBLIME
+unset VSCODE IDEA ECLIPSE SUBLIME
 if [[ -n "${VSCODE:=`ls -1d /Applications/Visual\ Studio\ Code* | tail -n1`}" ]]; then
   wait 10 "to open VSCODE with ${artifactId} application ..."
   open -a "$VSCODE" "${artifactId}/${artifactId}.code-workspace"
@@ -187,6 +187,9 @@ elif [[ -n "${IDEA:=`ls -1d /Applications/IntelliJ\ * | tail -n1`}" ]]; then
   info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
   wait 10 "to open IDEA with ${artifactId} application ..."
   open -a "$IDEA" "${artifactId}/pom.xml"
+elif [[ -n "${ECLIPSE:=`ls -1d /Applications/Eclipse\ */ | tail -n1`}" ]]; then
+  wait 10 "to open ECLIPSE with ${artifactId} application ..."
+  open -a "$ECLIPSE" "${artifactId}"
 elif [[ -n "${SUBLIME:=`ls -1d /Applications/Sublime\ Text* | tail -n1`}" ]]; then
   wait 10 "to open SUBLIME with ${artifactId} application ..."
   open -a "$SUBLIME" "${artifactId}"
