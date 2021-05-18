@@ -58,6 +58,7 @@ artifactId="${artifactId:-${groupId##*.}}"
 version="${version:-1.0.0}"
 dbSchema="${dbSchema:-${artifactId}}"
 appId="${appId:-1200}"
+alipayVersion="${alipayVersion:-no}"
 dockerRepo="${dockerRepo:-registry.cn-shanghai.aliyuncs.com}"
 dockerNs="${dockerNs:-glocal}"
 startApp="${startApp:-yes}"
@@ -68,6 +69,7 @@ info "artifactId: ${artifactId}"
 info "version: ${version}"
 info "dbSchema: ${dbSchema}"
 info "appId: ${appId}"
+info "alipayVersion: ${alipayVersion}"
 info "dockerRepo: ${dockerRepo}"
 info "dockerNs: ${dockerNs}"
 echo -n "continue to initializing application (${tty_bold}y${tty_reset}/n)? "
@@ -170,7 +172,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 mvn -q -s .mvn/settings.xml -gs .mvn/settings.xml archetype:generate -DarchetypeGroupId=com.alipay.archetypes \
     -DarchetypeArtifactId=glocal-sofaboot-archetype -DarchetypeVersion=4.2.2 -DarchetypeCatalog=local -DinteractiveMode=false \
     -DgroupId="${groupId}" -DartifactId="${artifactId}" -Dversion="${version}" -DappId="${appId}" -DdbSchema="${dbSchema}" \
-    -DdockerRepo="${dockerRepo}" -DdockerNs="${dockerNs}" && \
+    -DalipayVersion="${alipayVersion}" -DdockerRepo="${dockerRepo}" -DdockerNs="${dockerNs}" && \
 rm -rf .mvn
 end=`date +%s`;
 info "initialize ${artifactId} application done, spent ${tty_red}"$(( end-start ))"s${tty_reset}"
@@ -179,20 +181,22 @@ echo ""
 
 unset VSCODE IDEA ECLIPSE SUBLIME
 if [[ -n "${VSCODE:=`ls -1d /Applications/Visual\ Studio\ Code* | tail -n1`}" ]]; then
-  wait 10 "to open VSCODE with ${artifactId} application ..."
+  wait 10 "to open ${artifactId} application with VSCODE ..."
   open -a "$VSCODE" "${artifactId}/${artifactId}.code-workspace"
 elif [[ -n "${IDEA:=`ls -1d /Applications/IntelliJ\ * | tail -n1`}" ]]; then
   info "open \"Project Preferences(CMD+,)\", find \"Build, Execution, Deployment > Build Tools > Maven\" tab"
   info "set \"User settings file\" to \"$PWD/${artifactId}/.mvn/settings.xml\""
   info "set \"Local repository\" to \"$PWD/${artifactId}/.mvn/repository\""
-  wait 10 "to open IDEA with ${artifactId} application ..."
+  wait 10 "to open ${artifactId} application with IDEA ..."
   open -a "$IDEA" "${artifactId}/pom.xml"
 elif [[ -n "${ECLIPSE:=`ls -1d /Applications/Eclipse\ */ | tail -n1`}" ]]; then
-  wait 10 "to open ECLIPSE with ${artifactId} application ..."
+  wait 10 "to open ${artifactId} application with ECLIPSE ..."
   open -a "$ECLIPSE" "${artifactId}"
 elif [[ -n "${SUBLIME:=`ls -1d /Applications/Sublime\ Text* | tail -n1`}" ]]; then
-  wait 10 "to open SUBLIME with ${artifactId} application ..."
+  wait 10 "to open ${artifactId} application with SUBLIME ..."
   open -a "$SUBLIME" "${artifactId}"
+else
+  open "${artifactId}"
 fi
 echo ""
 
