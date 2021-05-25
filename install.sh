@@ -119,6 +119,18 @@ else
   echo "✅"
 fi
 
+echo -n "PORT 3316..........checked"
+OCCUPIED_PID=$(lsof -nP -iTCP:3316 | grep LISTEN | awk '{print $2}')
+if [[ -n "$OCCUPIED_PID" ]]; then
+  echo "❌"
+  echo "port 3316 is occupied by process $OCCUPIED_PID"
+  ps -ef | grep "$OCCUPIED_PID" | grep -v grep
+  wait 10 "to kill process $OCCUPIED_PID ..."
+  kill -9 "$OCCUPIED_PID"
+else
+  echo "✅"
+fi
+
 LIBSSL_SOURCE_PATH="/usr/lib/libssl.dylib"
 LIBSSL_TARGET_PATH="/usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
 LIBCRYPTO_SOURCE_PATH="/usr/lib/libcrypto.dylib"
